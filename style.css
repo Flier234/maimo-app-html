@@ -1,0 +1,75 @@
+/* Maimo - V21 FINAL - Stability & Feature Overhaul */
+
+/* --- :root Color & Theme Variables --- */
+:root {
+    --theme-base: #58cc02; --theme-dark: #4aa402; --theme-light: #72e213;
+    --red-duo: #ff4b4b; --red-duo-dark: #d93a3a;
+    --blue-duo: #1cb0f6; --blue-duo-dark: #1899d6;
+    --font-family: 'Nunito', sans-serif;
+    --shadow-neumorphic: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+    --shadow-neumorphic-inset: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+}
+html.light-mode { --text-dark: #3c3c3c; --text-light: #888; --bg-main: #f0f4f8; --surface-main: #ffffff; --surface-inset: #e6ecf1; --border-color: #dce3e9; --shadow-dark: #c5d3e2; --shadow-light: #ffffff; --source-text-color: #777; --bookmark-color: #f7b731; --favorite-color: #ffc107; }
+html.dark-mode { --text-dark: #e8e8e8; --text-light: #999; --bg-main: #1f1f1f; --surface-main: #2c2c2e; --surface-inset: #1a1a1c; --border-color: #38383a; --shadow-dark: #111111; --shadow-light: #414141; --source-text-color: #aaa; --bookmark-color: #ffc857; --favorite-color: #ffc107; }
+
+/* --- Global & Base Styles --- */
+* { box-sizing: border-box; }
+body { font-family: var(--font-family); color: var(--text-dark); background-color: var(--bg-main); min-height: 100dvh; margin: 0; padding: 0; }
+h1, h2, h3, h4 { color: var(--text-dark); font-weight: 900; }
+
+/* --- App Layout & Depth (Z-Index) --- */
+.app-container { display: flex; flex-direction: column; height: 100dvh; max-width: 800px; margin: 0 auto; width: 100%; padding: 0 20px 100px 20px; /* CRITICAL: Padding prevents shadow clipping */ }
+.app-header { display: flex; justify-content: space-between; align-items: center; padding: 25px 0 20px 0; z-index: 110; }
+main { flex-grow: 1; overflow-y: auto; position: relative; padding: 10px 0; }
+.tab-pane { display: none; flex-direction: column; gap: 25px; }
+.tab-pane.active { display: flex; }
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 800px; margin: 0 auto; height: 95px; padding: 10px 15px 25px 15px; background: var(--surface-main); display: flex; justify-content: space-around; align-items: center; z-index: 100; border-top: 1px solid var(--border-color); }
+.reader-view { position: fixed; top: 0; left: 0; width: 100%; height: 100dvh; z-index: 1500; background: var(--bg-main); display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100dvh; display: none; align-items: center; justify-content: center; z-index: 2000; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(5px); }
+
+/* --- Neumorphic Core Styles --- */
+.neumorphic, .card, .tactile-input, .custom-select, .cefr-btn, .folder-chip, .duo-button, .duo-button-secondary, .slider, .nav-button, .modal-content { background: var(--surface-main); box-shadow: var(--shadow-neumorphic); border: 1px solid var(--surface-main); border-radius: 16px; transition: all 0.2s ease; }
+.neumorphic-inset, .tactile-input:focus, .custom-select .select-selected.select-arrow-active, .duo-button:active, .nav-button.active, input:checked + .slider, .folder-chip.active, .cefr-btn.active { box-shadow: var(--shadow-neumorphic-inset) !important; }
+
+/* --- Components & Controls --- */
+.card { padding: 25px; border-radius: 24px; }
+.duo-button, .duo-button-secondary { padding: 15px 25px; font-weight: 700; cursor: pointer; text-transform: uppercase; border: none; }
+.duo-button { color: white; background: var(--theme-base); }
+.duo-button.red { background: var(--red-duo); }
+.tactile-input { padding: 15px; font-size: 16px; color: var(--text-dark); width: 100%; -webkit-appearance: none; border: none; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-weight: 700; margin-bottom: 10px; }
+.nav-button { width: 65px; height: 65px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-light); }
+.nav-button.active { color: var(--theme-base); transform: scale(0.95); }
+
+/* --- Custom Dropdown --- */
+.custom-select { z-index: 10; }
+.select-items { position: absolute; background-color: var(--surface-main); top: calc(100% - 1px); left: 0; right: 0; z-index: 900; max-height: 200px; overflow-y: auto; border: 1px solid var(--theme-base); border-top: none; border-radius: 0 0 16px 16px; }
+
+/* --- Dark Mode Switch (FIXED) --- */
+.setting-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
+.switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--surface-inset); }
+.slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: var(--surface-main); border-radius: 50%; transition: .4s; box-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
+input:checked + .slider { background-color: var(--theme-base); }
+input:checked + .slider:before { transform: translateX(26px); }
+
+/* --- Library & Item Cards (Overhauled) --- */
+#folders-container { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
+.folder-chip { padding: 8px 16px; font-weight: 700; cursor: pointer; font-size: 14px; }
+.folder-chip.drag-over { border: 2px dashed var(--theme-base); background-color: color-mix(in srgb, var(--theme-base) 10%, transparent); transform: scale(1.05); }
+#items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }
+.item-card { display: flex; flex-direction: column; justify-content: space-between; padding: 15px; cursor: grab; }
+.item-card:active { cursor: grabbing; }
+.item-card.dragging { opacity: 0.5; transform: scale(0.95); box-shadow: 0 0 0; }
+.item-card-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.item-favorite-btn { font-size: 20px; cursor: pointer; z-index: 5; transition: transform 0.2s ease; color: var(--text-light); }
+.item-favorite-btn.is-favorite { color: var(--favorite-color); transform: scale(1.2); }
+.item-card-content { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 10px 0; }
+.item-card-icon { font-size: 40px; line-height: 1; }
+.item-title { font-size: 15px; font-weight: 700; word-break: break-word; }
+.item-card-footer { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.item-badge { background-color: var(--surface-inset); color: var(--text-light); padding: 4px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+.item-delete-btn { width: 22px; height: 22px; border-radius: 50%; background: var(--red-duo); color: white; font-size: 12px; line-height: 22px; text-align: center; cursor: pointer; transition: all .2s ease; z-index: 5; box-shadow: var(--shadow-neumorphic); }
+.item-delete-btn:hover { background: var(--red-duo-dark); transform: scale(1.1); }

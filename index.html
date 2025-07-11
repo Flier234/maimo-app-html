@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Maimo</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon.png">
+    <meta name="theme-color" content="#58cc02">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script> (function() { const theme = localStorage.getItem('maimoTheme'); document.documentElement.className = theme === 'dark' ? 'dark-mode' : 'light-mode'; })(); </script>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo-container"><img id="app-logo" src="icon.png" alt="Maimo Logo"><h1>Maimo</h1></div>
+            <div id="language-selector" class="custom-select"></div>
+        </header>
+
+        <main>
+            <!-- Library Tab -->
+            <div id="library-pane" class="tab-pane">
+                <div class="card">
+                    <div class="filter-group"><div class="form-group"><label>Language</label><div id="library-filter-lang" class="custom-select"></div></div><div class="form-group"><label>Type</label><div id="library-filter-type" class="custom-select"></div></div></div>
+                    <div class="form-group"><label>CEFR Level</label><div id="cefr-filter-container"></div></div>
+                </div>
+                <div class="card">
+                    <h2>Folders</h2>
+                    <div id="folders-container"></div>
+                    <button id="create-folder-btn" class="duo-button blue small" style="margin-top: 15px;">➕ New Folder</button>
+                </div>
+                <div class="card">
+                    <h2>Library Items</h2>
+                    <div id="items-grid"></div>
+                </div>
+            </div>
+
+            <!-- Story Tab -->
+            <div id="story-pane" class="tab-pane">
+                 <div class="card">
+                    <h2>✨ Create a Story</h2>
+                    <div class="form-group"><label for="story-title">Story Idea / Title</label><input type="text" id="story-title" class="tactile-input" placeholder="e.g., A Roman legionary lost in Germania."></div>
+                    <div class="form-group"><label for="story-cefr">CEFR Level</label><div id="story-cefr" class="custom-select"></div></div>
+                    <div class="form-group"><label for="story-prompt">Style / Tone</label><textarea id="story-prompt" class="tactile-input" placeholder="e.g., Write in a formal, historical style. Make it dramatic."></textarea></div>
+                    <div class="form-group"><label for="story-words">Approx. Word Count</label><input type="number" id="story-words" class="tactile-input" value="300"></div>
+                    <button id="generate-story-btn" class="duo-button">🪄 Generate Story</button>
+                </div>
+            </div>
+
+            <!-- Text Tab -->
+            <div id="text-pane" class="tab-pane">
+                <div class="card">
+                    <h2>✍️ Paste Text</h2>
+                    <div class="form-group"><label for="pasted-text-input">Text to Translate</label><textarea id="pasted-text-input" class="tactile-input" placeholder="Paste your text here..."></textarea></div>
+                    <button id="translate-pasted-text-btn" class="duo-button">🌐 Translate & Save</button>
+                </div>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div id="settings-pane" class="tab-pane">
+                <div class="card"><div class="setting-item"><label>🌙 Dark Mode</label><label class="switch"><input type="checkbox" id="dark-mode-toggle"><span class="slider"></span></label></div></div>
+                <div class="card"><div class="setting-item"><h2>🔑 Gemini API Key</h2><button id="save-api-key-btn" class="duo-button small">💾 Save</button></div><p class="subtle-text">Your API key is saved securely in your browser's local storage.</p><input type="password" id="api-key-input" class="tactile-input" placeholder="Paste your key here"></div>
+                <div class="card"><h2>⚙️ Console</h2><div id="console-viewer"></div><button id="clear-console-btn" class="duo-button red small" style="margin-top: 15px;">🗑️ Clear</button></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Overlays and Modals -->
+    <div id="loader" class="modal-overlay"><div class="modal-content">Working...</div></div>
+    <div id="custom-modal" class="modal-overlay"><div class="modal-content"><h2 id="modal-title"></h2><p id="modal-text"></p><div id="modal-buttons"></div></div></div>
+    <div id="folder-modal" class="modal-overlay"><div class="modal-content"><h2>New Folder</h2><input type="text" id="folder-modal-input" class="tactile-input" placeholder="Enter folder name"><div id="folder-icon-gallery"></div><div id="modal-buttons"><button id="folder-modal-cancel" class="duo-button-secondary">Cancel</button><button id="folder-modal-create" class="duo-button">Create</button></div></div></div>
+    
+    <div class="bottom-nav">
+        <button class="nav-button active" data-tab="library"><span class="nav-icon">🗂️</span><span class="nav-label">Library</span></button>
+        <button class="nav-button" data-tab="story"><span class="nav-icon">🪄</span><span class="nav-label">Story</span></button>
+        <button class="nav-button" data-tab="text"><span class="nav-icon">✍️</span><span class="nav-label">Text</span></button>
+        <button class="nav-button" data-tab="settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+    </div>
+    
+    <div id="reader-view" class="reader-view">
+        <header class="reader-header"><button class="back-button">⬅️</button><h2 id="reader-title"></h2></header>
+        <div id="reader-body" class="reader-body"></div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
